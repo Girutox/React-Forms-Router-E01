@@ -1,71 +1,98 @@
 import { useState } from 'react'
 import './Login.scss'
 
-const Login = () => {
-  const [form, setForm] = useState({
-    email: '',
-    phone: '',
-    user: '',
-    password: ''
-  })
+const useForm = () => {
+  const [form, setForm] = useState({})
 
-  // const [email, setEmail] = useState<string>('')
-  // const [emailError, setEmailError] = useState<string>('')
-
-  // const [phone, setPhone] = useState<string>('')
-  // const [phoneError, setPhoneError] = useState<string>('')
-
-  // const [user, setUser] = useState<string>('')
-  // const [userError, setUserError] = useState<string>('')
-
-  // const [password, setPassword] = useState<string>('')
-  // const [passwordError, setPasswordError] = useState<string>('')
-
-  // const emailChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
-  //   setEmail(evt.target.value)
-  // }
-
-  // const phoneChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPhone(evt.target.value)
-  // }
-
-  // const userChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
-  //   setUser(evt.target.value)
-  // }
-
-  // const passwordChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPassword(evt.target.value)
-  // }
-
-  const formChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setForm(prev => {
-      return {
-        ...prev,
-        [evt.target.name]: evt.target.value
+  const register = (controlName: string) => {
+    const newControl = {
+      id: controlName,
+      name: controlName,
+      value: '',
+      error: '',
+      onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setForm(prev => ({
+          ...prev,
+          [controlName]: {
+            ...prev[controlName],
+            value: evt.target.value,
+          }
+        }))
       }
-    })
+    }
+
+    if (!form[controlName]) {
+      setForm({
+        ...form,
+        [controlName]: newControl
+      })
+    }
+
+    return { ...form[controlName] }
   }
+
+  return { register }
+}
+
+const Login = () => {
+  const { register } = useForm()
+
+  // const formChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  //   setForm(prev => {
+  //     return {
+  //       ...prev,
+  //       [evt.target.name]: {
+  //         value: evt.target.value,
+  //         error: ''
+  //       }
+  //     }
+  //   })
+  // }
 
   // const isValidForm = () => {
   //   let rpta = true
 
-  //   if (email === '') {
-  //     setEmailError('Email is required')
+  //   if (form.email.value === '') {
+  //     setForm(prev => ({
+  //       ...prev,
+  //       email: {
+  //         ...prev.email,
+  //         error: 'Email is required'
+  //       }
+  //     }))
   //     rpta = false
   //   }
 
-  //   if (phone === '') {
-  //     setPhoneError('Phone is required')
+  //   if (form.phone.value === '') {
+  //     setForm(prev => ({
+  //       ...prev,
+  //       phone: {
+  //         ...prev.phone,
+  //         error: 'Phone is required'
+  //       }
+  //     }))
   //     rpta = false
   //   }
 
-  //   if (user === '') {
-  //     setUserError('User is required')
+  //   if (form.user.value === '') {
+  //     setForm(prev => ({
+  //       ...prev,
+  //       user: {
+  //         ...prev.user,
+  //         error: 'User is required'
+  //       }
+  //     }))
   //     rpta = false
   //   }
 
-  //   if (password === '') {
-  //     setPasswordError('Password is required')
+  //   if (form.password.value === '') {
+  //     setForm(prev => ({
+  //       ...prev,
+  //       password: {
+  //         ...prev.password,
+  //         error: 'Password is required'
+  //       }
+  //     }))
   //     rpta = false
   //   }
 
@@ -77,7 +104,7 @@ const Login = () => {
 
     // if (!isValidForm()) return
 
-    console.log(form)
+    // console.log(form)
   }
 
   return <div className="login-container">
@@ -88,23 +115,23 @@ const Login = () => {
       <hr />
       <div className='control-container'>
         <label htmlFor="email">Email</label>
-        <input type="text" id='email' name='email' value={form.email} onChange={formChangeHandler} />
-        {/* {emailError} */}
+        <input type="text" {...register('email')} />
+        {/* {form.email.error && <p className='error'>{form.email.error}</p>} */}
       </div>
       <div className='control-container'>
         <label htmlFor="phone">Phone</label>
-        <input type="text" id='phone' name='phone' value={form.phone} onChange={formChangeHandler} />
-        {/* {phoneError} */}
+        <input type="text" {...register('phone')} />
+        {/* {form.phone.error && <p className='error'>{form.phone.error}</p>} */}
       </div>
       <div className='control-container'>
         <label htmlFor="user">User</label>
-        <input type="text" id='user' name='user' value={form.user} onChange={formChangeHandler} />
-        {/* {userError} */}
+        <input type="text" {...register('user')} />
+        {/* {form.user.error && <p className='error'>{form.user.error}</p>} */}
       </div>
       <div className='control-container'>
         <label htmlFor="password">Password</label>
-        <input type="password" id='password' name='password' value={form.password} onChange={formChangeHandler} />
-        {/* {passwordError} */}
+        <input type="password" {...register('password')} />
+        {/* {form.password.error && <p className='error'>{form.password.error}</p>} */}
       </div>
       <button>⤴ Sign Up</button>
     </form>
