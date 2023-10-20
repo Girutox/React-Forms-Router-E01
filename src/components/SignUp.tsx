@@ -13,11 +13,11 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm<Inputs>()
 
-  console.log(watch("email"))
+  // console.log(watch("email"))
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
 
