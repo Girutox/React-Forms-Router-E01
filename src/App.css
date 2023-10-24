@@ -11,3 +11,8 @@ ul {
   display: flex;
   justify-content: space-around;
 }
+
+.custom-active {
+  color: #61dafb;
+  pointer-events: none;
+}

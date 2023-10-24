@@ -1,4 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 
 import './Login.scss'
 
@@ -17,9 +18,16 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<Inputs>()
 
+  const navigate = useNavigate()
+
   // console.log(watch("email"))
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data)
+
+    // NAVIGATE TO HOME
+    navigate('/home')
+  }
 
   return <div className="login-container">
     <form onSubmit={handleSubmit(onSubmit)} >
