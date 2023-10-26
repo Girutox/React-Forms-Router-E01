@@ -1,3 +1,6 @@
+import { useContext } from 'react'
+import { AuthContext } from '../store/AuthProvider'
+
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 
@@ -18,12 +21,15 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<Inputs>()
 
+  const { login } = useContext(AuthContext)
   const navigate = useNavigate()
 
   // console.log(watch("email"))
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data)
+
+    login()
 
     // NAVIGATE TO HOME
     navigate('/home')
@@ -37,22 +43,22 @@ const SignUp = () => {
       <hr />
       <div className='control-container'>
         <label htmlFor="email">Email</label>
-        <input type="text" {...register('email', {required: true})} />
+        <input type="text" {...register('email', { required: true })} />
         {errors.email && <p className='error'>Email is required</p>}
       </div>
       <div className='control-container'>
         <label htmlFor="phone">Phone</label>
-        <input type="text" {...register('phone', {required: true})} />
+        <input type="text" {...register('phone', { required: true })} />
         {errors.phone && <p className='error'>Phone is required</p>}
       </div>
       <div className='control-container'>
         <label htmlFor="user">User</label>
-        <input type="text" {...register('user', {required: true})} />
+        <input type="text" {...register('user', { required: true })} />
         {errors.user && <p className='error'>User is required</p>}
       </div>
       <div className='control-container'>
         <label htmlFor="password">Password</label>
-        <input type="password" {...register('password', {required: true})} />
+        <input type="password" {...register('password', { required: true })} />
         {errors.password && <p className='error'>Password is required</p>}
       </div>
       <button type="submit">⤴ Sign Up</button>

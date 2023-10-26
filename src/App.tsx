@@ -2,9 +2,33 @@ import './App.css'
 // import Login from './components/Login'
 import SignUp from './components/SignUp'
 
-import { Route, Routes, Outlet, Link, NavLink, useParams, useOutletContext, useNavigate, NavLinkProps } from 'react-router-dom'
+import AuthProvider, { useAuth, AuthContext }  from './store/AuthProvider'
+import { useContext } from 'react'
+import { Route, Routes, Outlet, Link, NavLink as NavLinkRRD, useParams, useOutletContext, useNavigate, Navigate } from 'react-router-dom'
+
+const NavLink = ({ children, to }: { children: React.ReactNode, to: string }) => {
+  return (
+    <NavLinkRRD className={({ isActive }) => {
+      return isActive ? 'custom-active' : ''
+    }} to={to}>
+      {children}
+    </NavLinkRRD>
+  )
+}
+
+const ProtectedRoute = ({children}: { children: React.ReactNode }) => {
+  const {isLoggedIn} = useContext(AuthContext)
+
+  if (!isLoggedIn) {
+    return <Navigate to="/" />
+  }
+
+  return children
+}
 
 const Home = () => {
+  // useAuth()
+
   return (
     <>
       <header style={{ border: '1px solid white', padding: '10px' }}>
@@ -16,16 +40,12 @@ const Home = () => {
             <li>
               {/* <a href="/home/contacts">Contacts</a> */}
               {/* <Link to="/home/contacts">Contacts</Link> */}
-              <NavLink className={({ isActive })  => {
-                return  isActive ? 'custom-active' : ''
-              }} to="/home/contacts">Contacts</NavLink>
+              <NavLink to="/home/contacts">Contacts</NavLink>
             </li>
             <li>
               {/* <a href="/home/aboutus">About Us</a> */}
               {/* <Link to="/home/aboutus">About Us</Link> */}
-              <NavLink className={({ isActive }) => {
-                return  isActive ? 'custom-active' : ''
-              }} to="/home/aboutus">About Us</NavLink>
+              <NavLink to="/home/aboutus">About Us</NavLink>
             </li>
           </ul>
         </nav>
@@ -89,19 +109,28 @@ const VIPPersonInfo = () => {
   )
 }
 
+const Videogames = () => {
+  // useAuth()
+
+  return <h3>Videogames 🎮</h3>
+}
+
 function App() {
   return (
     <>
-      <Routes>
-        <Route path='/' element={<SignUp />} />
-        <Route path='/home' element={<Home />}>
-          <Route index element={<h3>Main content for HOME!!!!!!</h3>} />
-          <Route path='contacts' element={<Contacts />} />
-          <Route path='aboutus' element={<AboutUs />}>
-            <Route path=':vipPerson' element={<VIPPersonInfo />} />
+      <AuthProvider>
+        <Routes>
+          <Route path='/' element={<SignUp />} />
+          <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>}>
+            <Route index element={<h3>Main content for HOME!!!!!!</h3>} />
+            <Route path='contacts' element={<Contacts />} />
+            <Route path='aboutus' element={<AboutUs />}>
+              <Route path=':vipPerson' element={<VIPPersonInfo />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
+          <Route path='/videogames' element={<Videogames />} />
+        </Routes>
+      </AuthProvider>
     </>
   )
 }
